@@ -2,17 +2,22 @@ version: '3'
 services:
     dvws-mongo:
         image: mongo:4.0.4
+        networks:
+            - benchmark-net
     dvws-mysql:
         image: mysql:8
         environment:
             MYSQL_ROOT_PASSWORD: mysecretpassword
             MYSQL_DATABASE: dvws_sqldb
+        networks:
+            - benchmark-net
     web:
+        container_name: dvws-node
         build: .
         ports:
         - "4080:80"
-        - "4000:4000"          
-        - "4090:9090"        
+        - "4000:4000"
+        - "4090:9090"
         command: sh -c "/wait && node startup_script.js && npm start"
         environment:
             WAIT_HOSTS: dvws-mysql:3306, dvws-mongo:27017
@@ -22,3 +27,9 @@ services:
         depends_on:
             - dvws-mongo
             - dvws-mysql
+        networks:
+            - benchmark-net
+
+networks:
+    benchmark-net:
+        external: true
