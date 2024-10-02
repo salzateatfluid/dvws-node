@@ -10,9 +10,9 @@ services:
     web:
         build: .
         ports:
-        - "80:80"
+        - "4080:80"
         - "4000:4000"          
-        - "9090:9090"        
+        - "4090:9090"        
         command: sh -c "/wait && node startup_script.js && npm start"
         environment:
             WAIT_HOSTS: dvws-mysql:3306, dvws-mongo:27017
